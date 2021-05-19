@@ -8,6 +8,6 @@ public class Keys {
     public final static NamespacedKey CONDENSER;
 
     static {
-        CONDENSER = new NamespacedKey(CCCondenser.getInstance(), "wand");
+        CONDENSER = new NamespacedKey(CCCondenser.getInstance(), "condenser");
     }
 }
