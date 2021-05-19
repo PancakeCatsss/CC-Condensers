@@ -1,14 +1,13 @@
 package me.bobcatsss.cccondenser.handler;
 
-import java.net.http.WebSocket.Listener;
-
+import me.bobcatsss.cccondenser.CCCondenser;
+import me.bobcatsss.cccondenser.utils.BlockUtils;
 import org.bukkit.block.Block;
 import org.bukkit.block.Dropper;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.block.BlockDispenseEvent;
 
-import me.bobcatsss.cccondenser.CCCondenser;
-import me.bobcatsss.cccondenser.utils.BlockUtils;
+import java.net.http.WebSocket.Listener;
 
 public class CondenserPowerHandler implements Listener {
 	

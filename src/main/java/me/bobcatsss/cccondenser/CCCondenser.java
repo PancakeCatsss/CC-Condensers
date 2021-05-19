@@ -1,10 +1,9 @@
 package me.bobcatsss.cccondenser;
 
+import me.bobcatsss.cccondenser.utils.BlockUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
-
-import me.bobcatsss.cccondenser.utils.BlockUtils;
 
 public class CCCondenser extends JavaPlugin {
 	

@@ -1,8 +1,7 @@
 package me.bobcatsss.cccondenser.utils;
 
-import org.bukkit.NamespacedKey;
-
 import me.bobcatsss.cccondenser.CCCondenser;
+import org.bukkit.NamespacedKey;
 
 public class Keys {
 
