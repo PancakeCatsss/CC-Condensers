@@ -117,10 +117,11 @@ public class BlockListener implements Listener {
             }
         }
         if (!(event.getClickedBlock().getState() instanceof Dropper)) return;
-        BlockTask blockTask = blockManager.getTask((Dropper) event.getClickedBlock().getState());
+        Dropper dropper = (Dropper) event.getClickedBlock().getState();
+        BlockTask blockTask = blockManager.getTask(dropper);
         if (blockTask == null) return;
         event.setCancelled(true);
-        new UpgradeGUI(blockTask, player);
+        new UpgradeGUI(dropper, blockTask, player);
     }
 
     /**

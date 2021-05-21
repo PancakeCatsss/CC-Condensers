@@ -2,6 +2,7 @@ package me.bobcatsss.cccondenser.upgrades;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.block.Dropper;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
@@ -17,10 +18,12 @@ public class UpgradeGUI implements InventoryHolder {
 	
 	private final Inventory inventory;
 	private final BlockTask blockTask;
+	private final Dropper dropper;
 	private boolean upgradeAvailable = false;
 	
-	public UpgradeGUI(BlockTask task, Player player) {
+	public UpgradeGUI(Dropper dropper, BlockTask task, Player player) {
 		this.blockTask = task;
+		this.dropper = dropper;
 		this.inventory = Bukkit.createInventory(this, 9, "Block Breaker Upgrades");
 		int blocks = blockTask.getDataHandler().getBlocksBroken();
 		int level = blockTask.getDataHandler().getLevel();
@@ -33,6 +36,7 @@ public class UpgradeGUI implements InventoryHolder {
 		ItemBuilder builder = new ItemBuilder(Material.BEACON);
 		builder.withName("&6Upgrade").addLore("&fCurrent level: &a" + level).addLore("&fBlocks Broken: &a" + blocksBroken);
 		if(canUpgrade(blocksBroken, level)) {
+			upgradeAvailable = true;
 			builder.addLore("&m &m &m &m &m &m &m &m &m &m &m &m &m &m &m &m &m &m &m &m &m &m &m &m &m &m &m &m &m &m &m &m");
 			builder.addLore("&aUpgrade Available");
 			builder.addLore("&fCost: &a$ &a" + 1000 * level);
@@ -77,8 +81,10 @@ public class UpgradeGUI implements InventoryHolder {
 	public void handle(Player whoClicked, ItemStack clicked) {
 		if(clicked.getType() != Material.BEACON) return;
 		if(upgradeAvailable) {
-			blockTask.getDataHandler().setLevel(2);
+			blockTask.getDataHandler().setLevel(blockTask.getDataHandler().getLevel() + 1);
 			blockTask.getDataHandler().setBlocksBroken(0);
+			blockTask.getDataHandler().update(dropper);
+			upgradeAvailable = false;
 			whoClicked.closeInventory();
 			whoClicked.sendMessage("Block Breaker upgraded to level " + blockTask.getDataHandler().getLevel());
 		}
