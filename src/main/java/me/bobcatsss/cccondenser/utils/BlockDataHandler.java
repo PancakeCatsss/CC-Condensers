@@ -11,12 +11,14 @@ public class BlockDataHandler {
 
     private int level = 0;
     private long cooldownTarget = 0;
+    private int blocksBroken = 0;
 
     public BlockDataHandler () {}
 
     public BlockDataHandler (Dropper holder) {
         PersistentDataContainer container = holder.getPersistentDataContainer();
         level = container.getOrDefault(Keys.BLOCK_LEVEL, PersistentDataType.INTEGER, 1);
+        blocksBroken = container.getOrDefault(Keys.BLOCKS_BROKEN, PersistentDataType.INTEGER, 0);
         cooldownTarget = container.getOrDefault(Keys.BLOCK_COOLDOWN, PersistentDataType.LONG, 0L);
     }
 
@@ -24,12 +26,14 @@ public class BlockDataHandler {
         PersistentDataContainer container = holder.getPersistentDataContainer();
         level = container.getOrDefault(Keys.BLOCK_LEVEL, PersistentDataType.INTEGER, 1);
         cooldownTarget = container.getOrDefault(Keys.BLOCK_COOLDOWN, PersistentDataType.LONG, 0L);
+        blocksBroken = container.getOrDefault(Keys.BLOCKS_BROKEN, PersistentDataType.INTEGER, 0);
     }
 
     public void update (Dropper holder) {
         PersistentDataContainer container = holder.getPersistentDataContainer();
         container.set(Keys.BLOCK_LEVEL, PersistentDataType.INTEGER, level);
         container.set(Keys.BLOCK_COOLDOWN, PersistentDataType.LONG, cooldownTarget);
+        container.set(Keys.BLOCKS_BROKEN, PersistentDataType.INTEGER, blocksBroken);
         holder.update(true);
     }
 
@@ -48,6 +52,14 @@ public class BlockDataHandler {
 
     public boolean isOffCooldown () {
         return System.currentTimeMillis() > cooldownTarget;
+    }
+    
+    public int getBlocksBroken() {
+    	return blocksBroken;
+    }
+    
+    public void setBlocksBroken(int broken) {
+    	this.blocksBroken = broken;
     }
 
     public int getLevel() {

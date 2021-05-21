@@ -11,10 +11,12 @@ public class Keys {
 
     public final static NamespacedKey BLOCK_LEVEL;
     public final static NamespacedKey BLOCK_COOLDOWN;
+    public final static NamespacedKey BLOCKS_BROKEN;
 
     static {
         BLOCK_LEVEL = new NamespacedKey(CCCondenser.getInstance(), "level");
         BLOCK_COOLDOWN = new NamespacedKey(CCCondenser.getInstance(), "cooldown");
+        BLOCKS_BROKEN = new NamespacedKey(CCCondenser.getInstance(), "blocks_broken");
 
         CONDENSER = new NamespacedKey(CCCondenser.getInstance(), "item_condenser");
         BLOCK_BREAKER = new NamespacedKey(CCCondenser.getInstance(), "block_breaker");

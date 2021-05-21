@@ -72,6 +72,7 @@ public class BlockBreaker extends BlockTask<Dropper> {
 
         if (getDataHandler().isOffCooldown()) {
             target.breakNaturally();
+            getDataHandler().setBlocksBroken(getDataHandler().getBlocksBroken() + 1);
             getDataHandler().resetCooldown();
             getDataHandler().update(state);
         }else{

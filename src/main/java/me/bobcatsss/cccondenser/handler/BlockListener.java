@@ -1,19 +1,19 @@
 package me.bobcatsss.cccondenser.handler;
 
-import me.bobcatsss.cccondenser.CCCondenser;
-import me.bobcatsss.cccondenser.blocks.BlockManager;
-import me.bobcatsss.cccondenser.blocks.BlockTask;
-import me.bobcatsss.cccondenser.utils.Tuple;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.block.Block;
 import org.bukkit.block.Dropper;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.Event.Result;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockDispenseEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.inventory.InventoryAction;
+import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryMoveItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
@@ -22,6 +22,12 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataType;
+
+import me.bobcatsss.cccondenser.CCCondenser;
+import me.bobcatsss.cccondenser.blocks.BlockManager;
+import me.bobcatsss.cccondenser.blocks.BlockTask;
+import me.bobcatsss.cccondenser.upgrades.UpgradeGUI;
+import me.bobcatsss.cccondenser.utils.Tuple;
 
 
 public class BlockListener implements Listener {
@@ -102,8 +108,9 @@ public class BlockListener implements Listener {
     public void onInteract(PlayerInteractEvent event) {
         if (!event.hasBlock()) return;
         if (!event.getAction().name().contains("RIGHT")) return;
-        if (event.getPlayer().isSneaking()) {
-            EntityEquipment equipment = event.getPlayer().getEquipment();
+        Player player = event.getPlayer();
+        if (player.isSneaking()) {
+            EntityEquipment equipment = player.getEquipment();
             if (equipment != null) {
                 if ((equipment.getItemInMainHand().getType() != Material.AIR)) return;
                 if ((equipment.getItemInOffHand().getType() != Material.AIR)) return;
@@ -113,6 +120,7 @@ public class BlockListener implements Listener {
         BlockTask blockTask = blockManager.getTask((Dropper) event.getClickedBlock().getState());
         if (blockTask == null) return;
         event.setCancelled(true);
+        new UpgradeGUI(blockTask, player);
     }
 
     /**
@@ -145,5 +153,22 @@ public class BlockListener implements Listener {
             }
         }
     }
-
+    
+    @EventHandler
+    public void onClick(InventoryClickEvent event) {
+    	Player player = (Player) event.getWhoClicked();
+    	Inventory top = event.getView().getTopInventory();
+    	Inventory clicked = event.getClickedInventory();
+    	if(clicked == null) return;
+    	if(top == null) return;
+    	if(!(top.getHolder() instanceof UpgradeGUI)) return;
+    	if(!clicked.equals(top)) {
+    		if(event.getAction() == InventoryAction.MOVE_TO_OTHER_INVENTORY) event.setCancelled(true);
+    		return;
+    	}
+    	UpgradeGUI gui = (UpgradeGUI) event.getView().getTopInventory().getHolder();
+    	event.setCancelled(true);
+    	event.setResult(Result.DENY);
+    	gui.handle(player, event.getCurrentItem());
+    }
 }
